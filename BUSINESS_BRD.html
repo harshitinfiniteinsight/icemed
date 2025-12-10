@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Requirements Document - ICE Reconciliation Automation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @page {
             size: A4;
@@ -17,10 +18,10 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #2c3e50;
-            line-height: 1.6;
-            background: #f5f7fa;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1a1a1a;
+            line-height: 1.7;
+            background: #f8f9fa;
             padding: 20px;
         }
 
@@ -28,28 +29,46 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
             padding: 0;
         }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             color: white;
-            padding: 50px 40px;
-            text-align: center;
+            padding: 60px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
         }
 
         header h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 15px;
             font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         header .subtitle {
-            font-size: 1.3em;
+            font-size: 1.4em;
             opacity: 0.95;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
         }
 
         .header-meta {
@@ -57,115 +76,135 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .meta-card {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.12);
             backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .meta-card strong {
             display: block;
-            font-size: 0.9em;
+            font-size: 0.85em;
             opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .meta-card span {
-            font-size: 1.1em;
+            font-size: 1.15em;
             font-weight: 600;
         }
 
         /* Content */
         .content {
-            padding: 40px;
+            padding: 50px;
         }
 
         .section {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             page-break-inside: avoid;
         }
 
         .section-title {
-            font-size: 2em;
-            color: #667eea;
-            margin-bottom: 25px;
+            font-size: 2.2em;
+            color: #2563eb;
+            margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 4px solid #667eea;
+            border-bottom: 3px solid #e5e7eb;
             display: flex;
             align-items: center;
             gap: 15px;
+            font-weight: 700;
         }
 
-        .section-title::before {
-            content: '';
-            width: 6px;
-            height: 40px;
-            background: #667eea;
-            border-radius: 3px;
+        .section-title i {
+            font-size: 1.2em;
+            width: 40px;
+            text-align: center;
         }
 
         /* Cards */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
-            margin-top: 25px;
+            margin-top: 30px;
         }
 
         .card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            border-left: 5px solid #667eea;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-color: #2563eb;
         }
 
         .card-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 20px;
         }
 
         .card-title {
-            font-size: 1.4em;
+            font-size: 1.5em;
             font-weight: 700;
-            color: #2c3e50;
+            color: #1a1a1a;
             margin-bottom: 15px;
         }
 
         .card-content {
-            color: #555;
+            color: #4b5563;
             line-height: 1.8;
         }
 
         .card.highlight {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border-left-color: #667eea;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-color: #2563eb;
         }
 
         .card.warning {
-            border-left-color: #f39c12;
-            background: #fff4e6;
+            border-left: 4px solid #f59e0b;
+            background: #fffbeb;
         }
 
         .card.success {
-            border-left-color: #27ae60;
-            background: #e8f8f5;
+            border-left: 4px solid #10b981;
+            background: #f0fdf4;
+        }
+
+        .card.danger {
+            border-left: 4px solid #ef4444;
+            background: #fef2f2;
         }
 
         /* Tables */
         .table-container {
             overflow-x: auto;
-            margin: 25px 0;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 30px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
         }
 
         table {
@@ -175,24 +214,27 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             color: white;
         }
 
         th {
-            padding: 15px;
+            padding: 18px;
             text-align: left;
             font-weight: 600;
-            font-size: 1.05em;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         td {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 18px;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
         }
 
         tbody tr:hover {
-            background: #f8f9fa;
+            background: #f9fafb;
         }
 
         tbody tr:last-child td {
@@ -201,27 +243,25 @@
 
         /* Flowchart */
         .flowchart {
-            margin: 30px 0;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 15px;
+            margin: 40px 0;
+            padding: 0;
         }
 
         .flow-step {
             display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+            align-items: flex-start;
+            margin-bottom: 30px;
             position: relative;
         }
 
         .flow-step::after {
-            content: '↓';
+            content: '';
             position: absolute;
             left: 30px;
-            bottom: -25px;
-            font-size: 2em;
-            color: #667eea;
-            font-weight: bold;
+            bottom: -20px;
+            width: 2px;
+            height: 20px;
+            background: #2563eb;
         }
 
         .flow-step:last-child::after {
@@ -231,64 +271,288 @@
         .flow-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.8em;
-            margin-right: 20px;
+            font-size: 1.5em;
+            margin-right: 25px;
             flex-shrink: 0;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .flow-content {
             flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
         }
 
         .flow-title {
             font-weight: 700;
             font-size: 1.2em;
-            color: #667eea;
-            margin-bottom: 8px;
+            color: #2563eb;
+            margin-bottom: 10px;
         }
 
         .flow-description {
-            color: #555;
-            line-height: 1.6;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+
+        /* Wireframes */
+        .wireframe-container {
+            margin: 40px 0;
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px dashed #d1d5db;
+        }
+
+        .wireframe-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wireframe-box {
+            background: white;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .wireframe-header {
+            background: #e5e7eb;
+            height: 50px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .wireframe-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .wireframe-item {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .wireframe-item-label {
+            font-size: 0.75em;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .wireframe-item-value {
+            font-size: 0.9em;
+            color: #1a1a1a;
+        }
+
+        .wireframe-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .wireframe-table th,
+        .wireframe-table td {
+            border: 1px solid #d1d5db;
+            padding: 10px;
+            text-align: left;
+            font-size: 0.85em;
+        }
+
+        .wireframe-table th {
+            background: #e5e7eb;
+            font-weight: 600;
+        }
+
+        .wireframe-table td {
+            background: white;
+        }
+
+        /* User Flow Scenarios */
+        .scenario-container {
+            margin: 40px 0;
+        }
+
+        .scenario-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .scenario-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .scenario-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .scenario-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .scenario-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .scenario-badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .scenario-badge.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .flow-node {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .flow-node::after {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 50px;
+            width: 2px;
+            height: 20px;
+            background: #2563eb;
+        }
+
+        .flow-node:last-child::after {
+            display: none;
+        }
+
+        .flow-node-number {
+            width: 50px;
+            height: 50px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .flow-node-content {
+            flex: 1;
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .flow-node-title {
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .flow-node-description {
+            color: #4b5563;
+            font-size: 0.95em;
         }
 
         /* Process Diagram */
         .process-diagram {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
         }
 
         .process-box {
             background: white;
-            border: 3px solid #667eea;
-            border-radius: 15px;
-            padding: 25px;
+            border: 2px solid #2563eb;
+            border-radius: 16px;
+            padding: 30px;
             text-align: center;
             position: relative;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .process-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
         }
 
         .process-box::after {
             content: '→';
             position: absolute;
-            right: -30px;
+            right: -35px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 2em;
-            color: #667eea;
+            color: #2563eb;
             font-weight: bold;
         }
 
@@ -297,100 +561,119 @@
         }
 
         .process-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            margin: 0 auto 20px;
         }
 
         .process-title {
             font-weight: 700;
             font-size: 1.1em;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: #1a1a1a;
+            margin-bottom: 12px;
         }
 
         .process-description {
             font-size: 0.9em;
-            color: #666;
+            color: #6b7280;
+            line-height: 1.6;
         }
 
         /* Comparison Table */
         .comparison-table {
-            margin: 30px 0;
+            margin: 40px 0;
         }
 
         .comparison-table table {
-            border: 2px solid #667eea;
+            border: 2px solid #2563eb;
         }
 
         .comparison-table th {
-            background: #667eea;
+            background: #2563eb;
             color: white;
         }
 
         .comparison-table td:first-child {
             font-weight: 600;
-            background: #f8f9fa;
+            background: #f9fafb;
         }
 
         /* Benefits Grid */
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
         }
 
         .benefit-card {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #2563eb;
         }
 
         .benefit-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+            width: 50px;
+            height: 50px;
+            background: #2563eb;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 15px;
         }
 
         .benefit-title {
             font-weight: 700;
-            color: #667eea;
-            margin-bottom: 10px;
+            color: #2563eb;
+            margin-bottom: 12px;
+            font-size: 1.2em;
         }
 
         .benefit-description {
-            color: #555;
-            line-height: 1.6;
+            color: #4b5563;
+            line-height: 1.7;
         }
 
         /* Status Badges */
         .badge {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .badge-success {
-            background: #d4edda;
-            color: #155724;
+            background: #d1fae5;
+            color: #065f46;
         }
 
         .badge-warning {
-            background: #fff3cd;
-            color: #856404;
+            background: #fef3c7;
+            color: #92400e;
         }
 
         .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
+            background: #fee2e2;
+            color: #991b1b;
         }
 
         .badge-info {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: #dbeafe;
+            color: #1e40af;
         }
 
         /* Print Styles */
@@ -420,6 +703,10 @@
                 page-break-inside: avoid;
             }
 
+            .scenario-card {
+                page-break-inside: avoid;
+            }
+
             header {
                 page-break-after: avoid;
             }
@@ -429,19 +716,13 @@
             }
         }
 
-        /* Icons */
-        .icon {
-            display: inline-block;
-            margin-right: 8px;
-        }
-
         /* Footer */
         footer {
-            background: #2c3e50;
+            background: #1f2937;
             color: white;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 60px;
         }
 
         /* Two Column Layout */
@@ -449,7 +730,17 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
-            margin: 25px 0;
+            margin: 30px 0;
+        }
+
+        /* Code blocks */
+        code {
+            background: #f3f4f6;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #2563eb;
         }
 
         @media (max-width: 768px) {
@@ -464,29 +755,33 @@
             .process-diagram {
                 grid-template-columns: 1fr;
             }
+
+            header h1 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📋 Business Requirements Document</h1>
+            <h1><i class="fas fa-file-alt"></i> Business Requirements Document</h1>
             <div class="subtitle">ICE Charge Import & Reconciliation Automation</div>
             <div class="header-meta">
                 <div class="meta-card">
-                    <strong>Document Version</strong>
+                    <strong><i class="fas fa-code-branch"></i> Version</strong>
                     <span>1.0</span>
                 </div>
                 <div class="meta-card">
-                    <strong>Date</strong>
+                    <strong><i class="fas fa-calendar"></i> Date</strong>
                     <span>December 2025</span>
                 </div>
                 <div class="meta-card">
-                    <strong>Client</strong>
+                    <strong><i class="fas fa-building"></i> Client</strong>
                     <span>Intensive Care Experts (ICE)</span>
                 </div>
                 <div class="meta-card">
-                    <strong>Status</strong>
+                    <strong><i class="fas fa-check-circle"></i> Status</strong>
                     <span>Approved for Implementation</span>
                 </div>
             </div>
@@ -495,10 +790,10 @@
         <div class="content">
             <!-- Executive Summary -->
             <section class="section">
-                <h2 class="section-title">📊 Executive Summary</h2>
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> Executive Summary</h2>
                 
                 <div class="card highlight">
-                    <div class="card-icon">🎯</div>
+                    <div class="card-icon"><i class="fas fa-bullseye"></i></div>
                     <div class="card-title">Project Purpose</div>
                     <div class="card-content">
                         This project automates the ICE Charge Import and Reconciliation Process, eliminating approximately <strong>3 hours of daily manual work</strong> while providing ICE with structured, automated reconciliation outputs and maintaining a comprehensive historical ledger of unbillable encounters.
@@ -507,22 +802,22 @@
 
                 <div class="benefits-grid">
                     <div class="benefit-card">
-                        <div class="benefit-icon">⏱️</div>
+                        <div class="benefit-icon"><i class="fas fa-clock"></i></div>
                         <div class="benefit-title">Time Savings</div>
                         <div class="benefit-description">Eliminate 3 hours/day of manual reconciliation work</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">✅</div>
+                        <div class="benefit-icon"><i class="fas fa-check-double"></i></div>
                         <div class="benefit-title">Accuracy</div>
                         <div class="benefit-description">Reduce human error in reconciliation processes</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">📈</div>
+                        <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
                         <div class="benefit-title">Scalability</div>
                         <div class="benefit-description">Handle large files and multi-date scenarios automatically</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">🔍</div>
+                        <div class="benefit-icon"><i class="fas fa-search"></i></div>
                         <div class="benefit-title">Transparency</div>
                         <div class="benefit-description">Complete audit trail for all encounters</div>
                     </div>
@@ -531,15 +826,15 @@
 
             <!-- Current Situation -->
             <section class="section">
-                <h2 class="section-title">📋 Current Situation</h2>
+                <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Current Situation</h2>
 
                 <div class="card warning">
-                    <div class="card-icon">⚠️</div>
+                    <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
                     <div class="card-title">Current Manual Process</div>
                     <div class="card-content">
                         <p><strong>ICE sends daily spreadsheet</strong> containing patient encounter data. PRM imports this into the Electronic Billing System (EBS), which applies business rules to create billable claims.</p>
                         <p style="margin-top: 15px;"><strong>Manual reconciliation required:</strong> ICE manually prepares a Daily Reconciliation spreadsheet, PRM manually appends billing counts, and daily 3 PM meetings review discrepancies.</p>
-                        <p style="margin-top: 15px; font-weight: 700; color: #e74c3c;">⏱️ Time Required: 3 hours per day</p>
+                        <p style="margin-top: 15px; font-weight: 700; color: #ef4444;"><i class="fas fa-clock"></i> Time Required: 3 hours per day</p>
                     </div>
                 </div>
 
@@ -585,51 +880,428 @@
 
             <!-- Proposed Solution -->
             <section class="section">
-                <h2 class="section-title">💡 Proposed Solution</h2>
+                <h2 class="section-title"><i class="fas fa-lightbulb"></i> Proposed Solution</h2>
 
                 <div class="card success">
-                    <div class="card-icon">🚀</div>
+                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
                     <div class="card-title">Automated Reconciliation System</div>
                     <div class="card-content">
                         The solution will automatically process ICE export files, evaluate billing success/failure for each encounter, generate structured output files, and maintain a persistent historical ledger of unbillable encounters.
                     </div>
                 </div>
 
-                <h3 style="margin: 30px 0 20px 0; color: #667eea; font-size: 1.5em;">🔄 Automated Workflow</h3>
+                <h3 style="margin: 40px 0 25px 0; color: #2563eb; font-size: 1.6em; font-weight: 700;"><i class="fas fa-project-diagram"></i> Automated Workflow</h3>
                 <div class="flowchart">
                     <div class="flow-step">
-                        <div class="flow-icon">📤</div>
+                        <div class="flow-icon"><i class="fas fa-file-upload"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Step 1: ICE Sends File</div>
-                            <div class="flow-description">ICE sends daily spreadsheet: <code>Export PRM mm-dd-yyyy Completed.xlsx</code> containing encounter data for multiple service dates.</div>
+                            <div class="flow-description">ICE sends daily spreadsheet: <code>Export PRM mm-dd-yyyy Completed.xlsx</code> containing encounter data for multiple service dates. File is delivered via secure channel (email or SFTP).</div>
                         </div>
                     </div>
                     <div class="flow-step">
-                        <div class="flow-icon">⚙️</div>
+                        <div class="flow-icon"><i class="fas fa-cogs"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Step 2: Automated Processing</div>
-                            <div class="flow-description">System automatically processes the file, validates data, and imports into EBS for billing evaluation.</div>
+                            <div class="flow-description">System automatically processes the file, validates data structure and content, parses all encounter records, and prepares data for EBS import.</div>
                         </div>
                     </div>
                     <div class="flow-step">
-                        <div class="flow-icon">💳</div>
+                        <div class="flow-icon"><i class="fas fa-credit-card"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Step 3: Billing Evaluation</div>
-                            <div class="flow-description">EBS evaluates each encounter and determines if it can be billed. System captures success/failure status and reasons.</div>
+                            <div class="flow-description">EBS evaluates each encounter and determines if it can be billed. System captures success/failure status and specific reasons for failures (e.g., "Missing DX", "Missing CPT").</div>
                         </div>
                     </div>
                     <div class="flow-step">
-                        <div class="flow-icon">📊</div>
+                        <div class="flow-icon"><i class="fas fa-file-excel"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Step 4: Generate Output Files</div>
-                            <div class="flow-description">System generates two files: <strong>General Reconciliation</strong> (daily summary) and <strong>Master Missing</strong> (historical ledger).</div>
+                            <div class="flow-description">System generates two files: <strong>General Reconciliation</strong> (daily summary with all encounters and billing status) and <strong>Master Missing</strong> (cumulative historical ledger of unbillable encounters).</div>
                         </div>
                     </div>
                     <div class="flow-step">
-                        <div class="flow-icon">📧</div>
+                        <div class="flow-icon"><i class="fas fa-paper-plane"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Step 5: Automated Delivery</div>
-                            <div class="flow-description">Files are automatically delivered to ICE via email and/or SFTP for review.</div>
+                            <div class="flow-description">Files are automatically delivered to ICE via email and/or SFTP. Delivery confirmation is logged and tracked. ICE receives notification of file availability.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Flows and Scenarios -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-route"></i> User Flows & Scenarios</h2>
+
+                <!-- Scenario 1: Happy Path -->
+                <div class="scenario-container">
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <div class="scenario-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="scenario-title">Scenario 1: Successful Processing (Happy Path)</div>
+                            <span class="scenario-badge success">Success</span>
+                        </div>
+                        <div class="flow-diagram">
+                            <div class="flow-node">
+                                <div class="flow-node-number">1</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">ICE Uploads File</div>
+                                    <div class="flow-node-description">ICE operations team uploads <code>Export PRM 12-10-2025 Completed.xlsx</code> containing 150 encounters with complete data (DX codes, CPT codes, provider information).</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">2</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">System Validates File</div>
+                                    <div class="flow-node-description">System validates file format, checks for required columns, validates data types. All validations pass. File is accepted for processing.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">3</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">EBS Billing Evaluation</div>
+                                    <div class="flow-node-description">System sends each encounter to EBS for billing evaluation. EBS processes all 150 encounters successfully. All encounters receive "Billed = Yes" status.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">4</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Generate General Reconciliation</div>
+                                    <div class="flow-node-description">System generates General Reconciliation file with Data sheet (150 rows, all marked "Billed = Yes") and Summary sheet (aggregated metrics by date/facility/provider).</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">5</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Update Master Missing</div>
+                                    <div class="flow-node-description">No encounters need to be added to Master Missing since all were successfully billed. Existing Master Missing entries remain unchanged.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">6</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Deliver Files to ICE</div>
+                                    <div class="flow-node-description">System automatically emails General Reconciliation file to ICE operations team. File is also uploaded to SFTP server. ICE receives notification.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scenario 2: Partial Success -->
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <div class="scenario-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="scenario-title">Scenario 2: Partial Success (Some Encounters Fail)</div>
+                            <span class="scenario-badge warning">Warning</span>
+                        </div>
+                        <div class="flow-diagram">
+                            <div class="flow-node">
+                                <div class="flow-node-number">1</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">ICE Uploads File</div>
+                                    <div class="flow-node-description">ICE uploads file with 200 encounters. 150 encounters have complete data, 50 encounters are missing DX codes or CPT codes.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">2</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">System Validates File</div>
+                                    <div class="flow-node-description">File structure is valid. System accepts file but flags 50 encounters with missing data during validation phase.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">3</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">EBS Billing Evaluation</div>
+                                    <div class="flow-node-description">150 encounters bill successfully ("Billed = Yes"). 50 encounters fail billing evaluation with reasons: 30 "Missing DX", 20 "Missing CPT".</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">4</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Generate General Reconciliation</div>
+                                    <div class="flow-node-description">General Reconciliation file shows 150 "Billed = Yes" and 50 "Billed = No" with specific reasons. Summary sheet reflects partial billing success.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">5</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Update Master Missing</div>
+                                    <div class="flow-node-description">System checks if 50 failed encounters exist in Master Missing. 20 are new (added with current date), 30 are existing (updated with new attempt date and reason).</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">6</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Deliver Files to ICE</div>
+                                    <div class="flow-node-description">Both General Reconciliation and updated Master Missing files are delivered. ICE can see which encounters failed and why, enabling them to correct and resubmit.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scenario 3: Encounter Resolution -->
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <div class="scenario-icon"><i class="fas fa-sync-alt"></i></div>
+                            <div class="scenario-title">Scenario 3: Previously Failed Encounter Now Succeeds</div>
+                            <span class="scenario-badge success">Success</span>
+                        </div>
+                        <div class="flow-diagram">
+                            <div class="flow-node">
+                                <div class="flow-node-number">1</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Previous State</div>
+                                    <div class="flow-node-description">Encounter "Patient A, DOB 01/15/1950, DOS 11/17/2025, Facility: Azure Shores" was in Master Missing with reason "Missing DX" from previous import on 12/01/2025.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">2</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">ICE Corrects and Resubmits</div>
+                                    <div class="flow-node-description">ICE adds missing DX code to the encounter and includes it in new file <code>Export PRM 12-10-2025 Completed.xlsx</code>.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">3</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">System Processes File</div>
+                                    <div class="flow-node-description">System generates encounter key and matches it to existing Master Missing entry. Encounter is sent to EBS for evaluation.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">4</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">EBS Billing Success</div>
+                                    <div class="flow-node-description">EBS evaluates encounter with complete data and returns "Billed = Yes". Claim is successfully created.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">5</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Remove from Master Missing</div>
+                                    <div class="flow-node-description">System automatically removes this encounter from Master Missing file since it is now billable. Updated Master Missing file reflects removal.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">6</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">General Reconciliation Shows Success</div>
+                                    <div class="flow-node-description">General Reconciliation file shows this encounter with "Billed = Yes". ICE can see that the previously failed encounter is now successfully processed.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scenario 4: File Validation Error -->
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <div class="scenario-icon"><i class="fas fa-times-circle"></i></div>
+                            <div class="scenario-title">Scenario 4: File Validation Failure</div>
+                            <span class="scenario-badge error">Error</span>
+                        </div>
+                        <div class="flow-diagram">
+                            <div class="flow-node">
+                                <div class="flow-node-number">1</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">ICE Uploads Invalid File</div>
+                                    <div class="flow-node-description">ICE uploads file with missing required columns (e.g., "Patient Name" or "Date of Service" columns are missing).</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">2</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">System Validates File</div>
+                                    <div class="flow-node-description">System performs validation checks and identifies missing required columns. Validation fails.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">3</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Error Notification</div>
+                                    <div class="flow-node-description">System generates error report listing all validation failures (missing columns, invalid data types, etc.). Processing stops.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">4</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">Notify ICE</div>
+                                    <div class="flow-node-description">System sends error notification to ICE operations team with detailed error report. ICE can correct file and resubmit.</div>
+                                </div>
+                            </div>
+                            <div class="flow-node">
+                                <div class="flow-node-number">5</div>
+                                <div class="flow-node-content">
+                                    <div class="flow-node-title">No Files Generated</div>
+                                    <div class="flow-node-description">No General Reconciliation or Master Missing files are generated. System logs error for monitoring and audit purposes.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wireframes -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-drafting-compass"></i> System Wireframes</h2>
+
+                <!-- General Reconciliation Wireframe -->
+                <div class="wireframe-container">
+                    <div class="wireframe-title"><i class="fas fa-file-excel"></i> General Reconciliation File - Data Sheet</div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-header">General Reconciliation 12-10-2025.xlsx - Sheet: Data</div>
+                        <div class="table-container">
+                            <table class="wireframe-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient Name</th>
+                                        <th>DOB</th>
+                                        <th>Date of Service</th>
+                                        <th>Facility</th>
+                                        <th>CPT</th>
+                                        <th>DX</th>
+                                        <th>Billed</th>
+                                        <th>Reason for not billed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Smith, John</td>
+                                        <td>01/15/1950</td>
+                                        <td>11/17/2025</td>
+                                        <td>Azure Shores</td>
+                                        <td>99213</td>
+                                        <td>E11.9</td>
+                                        <td>Yes</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Doe, Jane</td>
+                                        <td>03/22/1945</td>
+                                        <td>11/18/2025</td>
+                                        <td>Sunset Manor</td>
+                                        <td>99214</td>
+                                        <td></td>
+                                        <td>No</td>
+                                        <td>Missing DX</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Johnson, Bob</td>
+                                        <td>07/10/1955</td>
+                                        <td>11/19/2025</td>
+                                        <td>Azure Shores</td>
+                                        <td></td>
+                                        <td>I10</td>
+                                        <td>No</td>
+                                        <td>Missing CPT</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Sheet Wireframe -->
+                <div class="wireframe-container">
+                    <div class="wireframe-title"><i class="fas fa-chart-bar"></i> General Reconciliation File - Summary Sheet</div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-header">General Reconciliation 12-10-2025.xlsx - Sheet: Summary</div>
+                        <div class="table-container">
+                            <table class="wireframe-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Facility</th>
+                                        <th>Provider</th>
+                                        <th>Type of Care</th>
+                                        <th>PRM Billing</th>
+                                        <th>CPTs</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>11/17/2025</td>
+                                        <td>Azure Shores</td>
+                                        <td>Dr. Smith</td>
+                                        <td>LTC</td>
+                                        <td>45</td>
+                                        <td>45</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11/18/2025</td>
+                                        <td>Sunset Manor</td>
+                                        <td>Dr. Jones</td>
+                                        <td>Acute</td>
+                                        <td>32</td>
+                                        <td>32</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11/19/2025</td>
+                                        <td>Azure Shores</td>
+                                        <td>Dr. Brown</td>
+                                        <td>LTC</td>
+                                        <td>28</td>
+                                        <td>28</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Master Missing Wireframe -->
+                <div class="wireframe-container">
+                    <div class="wireframe-title"><i class="fas fa-database"></i> Master Missing File</div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-header">Master Missing to 12-10-2025.xlsx - Sheet: Data</div>
+                        <div class="table-container">
+                            <table class="wireframe-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient Name</th>
+                                        <th>DOB</th>
+                                        <th>Date of Service</th>
+                                        <th>Type of Care</th>
+                                        <th>Facility</th>
+                                        <th>Last Attempt to Process</th>
+                                        <th>Billed</th>
+                                        <th>Reason for not billed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Doe, Jane</td>
+                                        <td>03/22/1945</td>
+                                        <td>11/18/2025</td>
+                                        <td>Acute</td>
+                                        <td>Sunset Manor</td>
+                                        <td>12/10/2025</td>
+                                        <td>No</td>
+                                        <td>Missing DX</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Johnson, Bob</td>
+                                        <td>07/10/1955</td>
+                                        <td>11/19/2025</td>
+                                        <td>LTC</td>
+                                        <td>Azure Shores</td>
+                                        <td>12/10/2025</td>
+                                        <td>No</td>
+                                        <td>Missing CPT</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Williams, Mary</td>
+                                        <td>05/05/1940</td>
+                                        <td>11/15/2025</td>
+                                        <td>LTC</td>
+                                        <td>Azure Shores</td>
+                                        <td>12/08/2025</td>
+                                        <td>No</td>
+                                        <td>Provider validation failed</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -637,11 +1309,11 @@
 
             <!-- Output Files -->
             <section class="section">
-                <h2 class="section-title">📄 Output Files</h2>
+                <h2 class="section-title"><i class="fas fa-file-export"></i> Output Files</h2>
 
                 <div class="card-grid">
                     <div class="card">
-                        <div class="card-icon">📋</div>
+                        <div class="card-icon"><i class="fas fa-file-alt"></i></div>
                         <div class="card-title">General Reconciliation File</div>
                         <div class="card-content">
                             <p><strong>File Name:</strong> <code>General Reconciliation mm-dd-yyyy.xlsx</code></p>
@@ -655,7 +1327,7 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-icon">📚</div>
+                        <div class="card-icon"><i class="fas fa-archive"></i></div>
                         <div class="card-title">Master Missing File</div>
                         <div class="card-content">
                             <p><strong>File Name:</strong> <code>Master Missing to mm-dd-yyyy.xlsx</code></p>
@@ -706,7 +1378,7 @@
 
             <!-- Process Comparison -->
             <section class="section">
-                <h2 class="section-title">⚖️ Current vs. Proposed Process</h2>
+                <h2 class="section-title"><i class="fas fa-balance-scale"></i> Current vs. Proposed Process</h2>
 
                 <div class="comparison-table">
                     <table>
@@ -760,26 +1432,26 @@
 
             <!-- Business Rules -->
             <section class="section">
-                <h2 class="section-title">📐 Business Rules</h2>
+                <h2 class="section-title"><i class="fas fa-gavel"></i> Business Rules</h2>
 
                 <div class="process-diagram">
                     <div class="process-box">
-                        <div class="process-icon">🔍</div>
+                        <div class="process-icon"><i class="fas fa-search"></i></div>
                         <div class="process-title">Encounter Evaluation</div>
                         <div class="process-description">Each encounter is evaluated by EBS to determine if it can be billed</div>
                     </div>
                     <div class="process-box">
-                        <div class="process-icon">✅</div>
+                        <div class="process-icon"><i class="fas fa-check-circle"></i></div>
                         <div class="process-title">Billing Success</div>
                         <div class="process-description">If all required data present → Marked as "Billed = Yes"</div>
                     </div>
                     <div class="process-box">
-                        <div class="process-icon">❌</div>
+                        <div class="process-icon"><i class="fas fa-times-circle"></i></div>
                         <div class="process-title">Billing Failure</div>
                         <div class="process-description">If data missing → Marked as "Billed = No" with reason</div>
                     </div>
                     <div class="process-box">
-                        <div class="process-icon">📝</div>
+                        <div class="process-icon"><i class="fas fa-tag"></i></div>
                         <div class="process-title">Reason Capture</div>
                         <div class="process-description">System captures specific reason (e.g., "Missing DX", "Missing CPT")</div>
                     </div>
@@ -833,25 +1505,25 @@
 
             <!-- Master Missing Behavior -->
             <section class="section">
-                <h2 class="section-title">🔄 Master Missing File Behavior</h2>
+                <h2 class="section-title"><i class="fas fa-sync-alt"></i> Master Missing File Behavior</h2>
 
                 <div class="flowchart">
                     <div class="flow-step">
-                        <div class="flow-icon">📥</div>
+                        <div class="flow-icon"><i class="fas fa-plus-circle"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">New Encounter Cannot Be Billed</div>
                             <div class="flow-description">When an encounter fails billing evaluation, it is added to the Master Missing file with the current date as "Last Attempt to Process" and the specific reason for failure.</div>
                         </div>
                     </div>
                     <div class="flow-step">
-                        <div class="flow-icon">🔄</div>
+                        <div class="flow-icon"><i class="fas fa-edit"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Encounter Reappears in Later File</div>
                             <div class="flow-description">If the same encounter (identified by unique key) appears in a future import file, the system updates the existing Master Missing record with the new "Last Attempt to Process" date and updated reason.</div>
                         </div>
                     </div>
                     <div class="flow-step">
-                        <div class="flow-icon">✅</div>
+                        <div class="flow-icon"><i class="fas fa-check-circle"></i></div>
                         <div class="flow-content">
                             <div class="flow-title">Encounter Becomes Billable</div>
                             <div class="flow-description">If an encounter that was previously in Master Missing now successfully bills, it is automatically removed from the Master Missing file and appears in the General Reconciliation file with "Billed = Yes".</div>
@@ -860,7 +1532,7 @@
                 </div>
 
                 <div class="card" style="margin-top: 30px;">
-                    <div class="card-icon">💡</div>
+                    <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
                     <div class="card-title">Key Benefit</div>
                     <div class="card-content">
                         This mechanism ensures <strong>no encounter is ever lost</strong>, even if ICE resends incomplete records weeks or months later. The Master Missing file serves as a complete historical audit trail of all unbillable encounters.
@@ -870,36 +1542,36 @@
 
             <!-- Expected Outcomes -->
             <section class="section">
-                <h2 class="section-title">🎯 Expected Outcomes</h2>
+                <h2 class="section-title"><i class="fas fa-trophy"></i> Expected Outcomes</h2>
 
                 <div class="benefits-grid">
                     <div class="benefit-card">
-                        <div class="benefit-icon">⏱️</div>
+                        <div class="benefit-icon"><i class="fas fa-clock"></i></div>
                         <div class="benefit-title">Operational Efficiency</div>
                         <div class="benefit-description">Elimination of 3 hours/day of manual work, reduced errors, improved scalability</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">👁️</div>
+                        <div class="benefit-icon"><i class="fas fa-eye"></i></div>
                         <div class="benefit-title">Transparency</div>
                         <div class="benefit-description">ICE receives complete, consistent, automated reconciliation package</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">📊</div>
+                        <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
                         <div class="benefit-title">Accountability</div>
                         <div class="benefit-description">Full audit trail for incomplete encounters via Master Missing file</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">📈</div>
+                        <div class="benefit-icon"><i class="fas fa-arrow-up"></i></div>
                         <div class="benefit-title">Scalability</div>
                         <div class="benefit-description">Process supports large files with multi-day history automatically</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">😊</div>
+                        <div class="benefit-icon"><i class="fas fa-smile"></i></div>
                         <div class="benefit-title">Client Satisfaction</div>
                         <div class="benefit-description">Strengthens trust and reduces daily friction in operations</div>
                     </div>
                     <div class="benefit-card">
-                        <div class="benefit-icon">🔮</div>
+                        <div class="benefit-icon"><i class="fas fa-rocket"></i></div>
                         <div class="benefit-title">Future Foundation</div>
                         <div class="benefit-description">Creates foundation for future end-to-end automation initiatives</div>
                     </div>
@@ -908,11 +1580,11 @@
 
             <!-- Scope -->
             <section class="section">
-                <h2 class="section-title">📦 Scope of Work</h2>
+                <h2 class="section-title"><i class="fas fa-list-check"></i> Scope of Work</h2>
 
                 <div class="two-column">
                     <div class="card success">
-                        <div class="card-icon">✅</div>
+                        <div class="card-icon"><i class="fas fa-check"></i></div>
                         <div class="card-title">In Scope</div>
                         <div class="card-content">
                             <ul style="margin-left: 20px; margin-top: 10px;">
@@ -929,7 +1601,7 @@
                     </div>
 
                     <div class="card warning">
-                        <div class="card-icon">❌</div>
+                        <div class="card-icon"><i class="fas fa-times"></i></div>
                         <div class="card-title">Out of Scope</div>
                         <div class="card-content">
                             <ul style="margin-left: 20px; margin-top: 10px;">
@@ -947,7 +1619,7 @@
 
             <!-- Success Criteria -->
             <section class="section">
-                <h2 class="section-title">✅ Success Criteria</h2>
+                <h2 class="section-title"><i class="fas fa-flag-checkered"></i> Success Criteria</h2>
 
                 <div class="table-container">
                     <table>
@@ -991,7 +1663,7 @@
 
             <!-- Risks & Mitigations -->
             <section class="section">
-                <h2 class="section-title">⚠️ Risks & Mitigations</h2>
+                <h2 class="section-title"><i class="fas fa-exclamation-triangle"></i> Risks & Mitigations</h2>
 
                 <div class="table-container">
                     <table>
@@ -1030,11 +1702,11 @@
 
             <!-- Timeline -->
             <section class="section">
-                <h2 class="section-title">📅 Project Timeline</h2>
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Project Timeline</h2>
 
                 <div class="card-grid">
                     <div class="card">
-                        <div class="card-icon">🚀</div>
+                        <div class="card-icon"><i class="fas fa-rocket"></i></div>
                         <div class="card-title">Phase 1: Foundation</div>
                         <div class="card-content">
                             <p><strong>Duration:</strong> Weeks 1-2</p>
@@ -1042,7 +1714,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-icon">🔗</div>
+                        <div class="card-icon"><i class="fas fa-plug"></i></div>
                         <div class="card-title">Phase 2: Integration</div>
                         <div class="card-content">
                             <p><strong>Duration:</strong> Weeks 3-4</p>
@@ -1050,7 +1722,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-icon">🔒</div>
+                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
                         <div class="card-title">Phase 3: Security</div>
                         <div class="card-content">
                             <p><strong>Duration:</strong> Weeks 5-6</p>
@@ -1058,7 +1730,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-icon">⚙️</div>
+                        <div class="card-icon"><i class="fas fa-cogs"></i></div>
                         <div class="card-title">Phase 4: Automation</div>
                         <div class="card-content">
                             <p><strong>Duration:</strong> Weeks 7-8</p>
@@ -1066,7 +1738,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-icon">📊</div>
+                        <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
                         <div class="card-title">Phase 5: Monitoring</div>
                         <div class="card-content">
                             <p><strong>Duration:</strong> Weeks 9-10</p>
@@ -1074,7 +1746,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-icon">🎉</div>
+                        <div class="card-icon"><i class="fas fa-flag"></i></div>
                         <div class="card-title">Phase 6: Launch</div>
                         <div class="card-content">
                             <p><strong>Duration:</strong> Weeks 11-12</p>
@@ -1086,7 +1758,7 @@
         </div>
 
         <footer>
-            <p><strong>Document Prepared By:</strong> PRM Development Team</p>
+            <p><strong><i class="fas fa-users"></i> Document Prepared By:</strong> PRM Development Team</p>
             <p style="margin-top: 10px;">For questions or clarifications, please contact the project team.</p>
             <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">© 2025 PRM - Confidential Business Requirements Document</p>
         </footer>
