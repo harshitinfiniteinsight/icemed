@@ -446,11 +446,29 @@ def download_file(file_type):
                 'error': 'Invalid file type'
             }), 400
         
-        if not file_path or not os.path.exists(file_path):
+        if not file_path:
             return jsonify({
                 'success': False,
-                'error': 'File not found'
+                'error': f'File path not found for {file_type}'
             }), 404
+        
+        print(f"DEBUG download: Looking for file at: {file_path}")
+        print(f"DEBUG download: File exists: {os.path.exists(file_path)}")
+        
+        # If file doesn't exist at original path, try /tmp
+        if not os.path.exists(file_path):
+            import tempfile
+            filename = os.path.basename(file_path)
+            temp_path = os.path.join(tempfile.gettempdir(), filename)
+            print(f"DEBUG download: Trying /tmp path: {temp_path}")
+            if os.path.exists(temp_path):
+                file_path = temp_path
+                print(f"DEBUG download: Found file in /tmp: {temp_path}")
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': f'File not found: {file_path} or {temp_path}'
+                }), 404
         
         return send_file(
             file_path,
@@ -488,11 +506,29 @@ def download_file_by_job(job_id, file_type):
                 'error': 'Invalid file type'
             }), 400
         
-        if not file_path or not os.path.exists(file_path):
+        if not file_path:
             return jsonify({
                 'success': False,
-                'error': 'File not found'
+                'error': f'File path not found for {file_type}'
             }), 404
+        
+        print(f"DEBUG download: Looking for file at: {file_path}")
+        print(f"DEBUG download: File exists: {os.path.exists(file_path)}")
+        
+        # If file doesn't exist at original path, try /tmp
+        if not os.path.exists(file_path):
+            import tempfile
+            filename = os.path.basename(file_path)
+            temp_path = os.path.join(tempfile.gettempdir(), filename)
+            print(f"DEBUG download: Trying /tmp path: {temp_path}")
+            if os.path.exists(temp_path):
+                file_path = temp_path
+                print(f"DEBUG download: Found file in /tmp: {temp_path}")
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': f'File not found: {file_path} or {temp_path}'
+                }), 404
         
         return send_file(
             file_path,
