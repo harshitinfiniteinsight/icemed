@@ -14,6 +14,5 @@ os.chdir(PROJECT_ROOT)
 # Import Flask app
 from web.app import app
 
-# Vercel Python runtime expects the WSGI app directly
-# Export as both 'handler' and 'app' for compatibility
-handler = app
+# Vercel Python runtime expects WSGI app
+# Export as 'app' (Vercel auto-detects Flask WSGI apps)
