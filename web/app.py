@@ -284,13 +284,6 @@ def process_sample():
                 'error': 'Orchestrator not initialized. Check server logs.'
             }), 500
         
-        # Check if orchestrator is initialized
-        if orchestrator is None:
-            return jsonify({
-                'success': False,
-                'error': 'Orchestrator not initialized. Check server logs.'
-            }), 500
-        
         # Process file
         job_id = str(uuid.uuid4())
         summary, output_files = orchestrator.run(file_path)
