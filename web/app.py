@@ -37,12 +37,20 @@ except Exception:
     pass  # May fail in serverless environment, that's OK
 
 # Initialize orchestrator with absolute path to config
+# Defer initialization to avoid read-only filesystem issues at import time
 CONFIG_PATH = os.path.join(PROJECT_ROOT, 'config.json')
-try:
-    orchestrator = ReconciliationOrchestrator(CONFIG_PATH)
-except Exception as e:
-    print(f"Warning: Failed to initialize orchestrator: {e}")
-    orchestrator = None  # Will be handled in routes
+orchestrator = None
+
+def get_orchestrator():
+    """Lazy initialization of orchestrator"""
+    global orchestrator
+    if orchestrator is None:
+        try:
+            orchestrator = ReconciliationOrchestrator(CONFIG_PATH)
+        except Exception as e:
+            print(f"Warning: Failed to initialize orchestrator: {e}")
+            # Return None - routes will handle this
+    return orchestrator
 
 # Store results in memory (in production, use Redis or database)
 results_store = {}
@@ -217,8 +225,9 @@ def upload_file():
         file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
         file.save(file_path)
         
-        # Check if orchestrator is initialized
-        if orchestrator is None:
+        # Get orchestrator (lazy initialization)
+        orch = get_orchestrator()
+        if orch is None:
             return jsonify({
                 'success': False,
                 'error': 'Orchestrator not initialized. Check server logs.'
@@ -226,7 +235,7 @@ def upload_file():
         
         # Process file
         job_id = str(uuid.uuid4())
-        summary, output_files = orchestrator.run(file_path)
+        summary, output_files = orch.run(file_path)
         
         # Get preview data
         preview_data = get_preview_data(output_files['general_reconciliation'])
@@ -277,8 +286,9 @@ def process_sample():
                 'error': f'Sample file not found: {sample_name}'
             }), 404
         
-        # Check if orchestrator is initialized
-        if orchestrator is None:
+        # Get orchestrator (lazy initialization)
+        orch = get_orchestrator()
+        if orch is None:
             return jsonify({
                 'success': False,
                 'error': 'Orchestrator not initialized. Check server logs.'
@@ -286,7 +296,7 @@ def process_sample():
         
         # Process file
         job_id = str(uuid.uuid4())
-        summary, output_files = orchestrator.run(file_path)
+        summary, output_files = orch.run(file_path)
         
         # Get preview data
         preview_data = get_preview_data(output_files['general_reconciliation'])

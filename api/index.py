@@ -15,4 +15,5 @@ os.chdir(PROJECT_ROOT)
 from web.app import app
 
 # Vercel Python runtime expects WSGI app
-# Export as 'app' (Vercel auto-detects Flask WSGI apps)
+# Export as 'app' - Vercel will detect Flask WSGI application
+__all__ = ['app']
