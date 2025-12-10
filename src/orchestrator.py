@@ -121,9 +121,10 @@ class ReconciliationOrchestrator:
             output_folder = self._resolve_path(self.config.get("output", {}).get("folderPath", "data/output"))
             reconciliation_path = os.path.join(output_folder, reconciliation_filename)
             
-            self.reconciliation_gen.generate(encounters, billing_results, reconciliation_path, execution_date)
-            summary.general_reconciliation_file = reconciliation_path
-            logger.info(f"Created: {reconciliation_path}")
+            # Generate file and get actual path (may be /tmp if read-only)
+            actual_reconciliation_path = self.reconciliation_gen.generate(encounters, billing_results, reconciliation_path, execution_date)
+            summary.general_reconciliation_file = actual_reconciliation_path
+            logger.info(f"Created: {actual_reconciliation_path}")
             
             # Step 4: Update Master Missing file
             logger.info("Step 4: Updating Master Missing file")
@@ -149,9 +150,10 @@ class ReconciliationOrchestrator:
             master_missing_folder = self._resolve_path(self.config.get("masterMissing", {}).get("folderPath", "data/output"))
             master_missing_path = os.path.join(master_missing_folder, master_missing_filename)
             
-            self.master_missing_mgr.write_file(updated_master_missing, master_missing_path, execution_date)
-            summary.master_missing_file = master_missing_path
-            logger.info(f"Created: {master_missing_path}")
+            # Write file and get actual path (may be /tmp if read-only)
+            actual_master_missing_path = self.master_missing_mgr.write_file(updated_master_missing, master_missing_path, execution_date)
+            summary.master_missing_file = actual_master_missing_path
+            logger.info(f"Created: {actual_master_missing_path}")
             logger.info(f"Master Missing: {len(updated_master_missing)} total records (Added: {stats['added']}, Updated: {stats['updated']}, Removed: {stats['removed']})")
             
             # Step 5: Generate execution summary

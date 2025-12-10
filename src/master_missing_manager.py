@@ -186,6 +186,7 @@ class MasterMissingManager:
             ws.column_dimensions[column_letter].width = adjusted_width
         
         # Save file (use /tmp if original path is read-only)
+        actual_output_path = output_path
         try:
             wb.save(output_path)
         except (OSError, PermissionError):
@@ -198,9 +199,13 @@ class MasterMissingManager:
             temp_path = os.path.join(temp_dir, filename)
             wb.save(temp_path)
             logger.warning(f"Cannot write to {output_path}, saved to {temp_path} instead")
-            # Update output_path for caller
-            output_path = temp_path
-        logger.info(f"Saved Master Missing file: {output_path} ({len(records)} records)")
+            # Update actual_output_path for caller
+            actual_output_path = temp_path
+        
+        logger.info(f"Saved Master Missing file: {actual_output_path} ({len(records)} records)")
+        
+        # Return the actual path where file was saved
+        return actual_output_path
     
     def _find_latest_master_missing_file(self) -> str:
         """Find the most recent Master Missing file in the folder"""

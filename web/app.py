@@ -66,16 +66,24 @@ def get_preview_data(reconciliation_file_path, max_rows=20):
     from openpyxl import load_workbook
     preview_data = []
     try:
+        if not reconciliation_file_path or not os.path.exists(reconciliation_file_path):
+            print(f"Warning: Reconciliation file not found: {reconciliation_file_path}")
+            return preview_data
+        
         wb = load_workbook(reconciliation_file_path, read_only=True, data_only=True)
         ws = wb['Data']
         rows = list(ws.iter_rows(values_only=True))
         headers = rows[0] if rows else []
         # Get first max_rows of data (skip header)
         for row in rows[1:max_rows+1]:
-            preview_data.append(dict(zip(headers, row)))
+            if row:  # Skip empty rows
+                preview_data.append(dict(zip(headers, row)))
         wb.close()
+        print(f"Successfully loaded {len(preview_data)} preview rows from {reconciliation_file_path}")
     except Exception as e:
-        print(f"Error reading preview data: {e}")
+        print(f"Error reading preview data from {reconciliation_file_path}: {e}")
+        import traceback
+        traceback.print_exc()
     return preview_data
 
 

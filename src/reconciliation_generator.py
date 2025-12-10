@@ -21,7 +21,7 @@ class GeneralReconciliationGenerator:
         self.date_format = self.config.get("dateFormat", "MM-dd-yyyy")
     
     def generate(self, encounters: List[Encounter], billing_results: List[BillingResult], 
-                 output_path: str, execution_date: str = None) -> None:
+                 output_path: str, execution_date: str = None) -> str:
         """
         Generate General Reconciliation Excel file
         
@@ -48,6 +48,7 @@ class GeneralReconciliationGenerator:
         self._create_summary_sheet(wb, encounters, billing_results)
         
         # Save file (use /tmp if original path is read-only)
+        actual_output_path = output_path
         try:
             wb.save(output_path)
         except (OSError, PermissionError):
@@ -60,9 +61,13 @@ class GeneralReconciliationGenerator:
             temp_path = os.path.join(temp_dir, filename)
             wb.save(temp_path)
             logger.warning(f"Cannot write to {output_path}, saved to {temp_path} instead")
-            # Update output_path for caller
-            output_path = temp_path
-        logger.info(f"Generated General Reconciliation file: {output_path}")
+            # Update actual_output_path for caller
+            actual_output_path = temp_path
+        
+        logger.info(f"Generated General Reconciliation file: {actual_output_path}")
+        
+        # Return the actual path where file was saved
+        return actual_output_path
     
     def _create_data_sheet(self, wb: Workbook, encounters: List[Encounter], 
                           billing_results: List[BillingResult]) -> None:
