@@ -246,7 +246,10 @@ def upload_file():
         summary, output_files = orch.run(file_path)
         
         # Get preview data
-        preview_data = get_preview_data(output_files['general_reconciliation'])
+        reconciliation_file_path = output_files.get('general_reconciliation')
+        print(f"DEBUG: Getting preview data from: {reconciliation_file_path}")
+        preview_data = get_preview_data(reconciliation_file_path)
+        print(f"DEBUG: Preview data loaded: {len(preview_data)} rows")
         
         # Store results
         results_store[job_id] = {
@@ -255,6 +258,7 @@ def upload_file():
             'preview_data': preview_data,
             'timestamp': datetime.now().isoformat()
         }
+        print(f"DEBUG: Stored results for job {job_id}, preview_data length: {len(preview_data)}")
         
         # Store job_id in session
         session['job_id'] = job_id
@@ -307,7 +311,10 @@ def process_sample():
         summary, output_files = orch.run(file_path)
         
         # Get preview data
-        preview_data = get_preview_data(output_files['general_reconciliation'])
+        reconciliation_file_path = output_files.get('general_reconciliation')
+        print(f"DEBUG: Getting preview data from: {reconciliation_file_path}")
+        preview_data = get_preview_data(reconciliation_file_path)
+        print(f"DEBUG: Preview data loaded: {len(preview_data)} rows")
         
         # Store results
         results_store[job_id] = {
@@ -316,6 +323,7 @@ def process_sample():
             'preview_data': preview_data,
             'timestamp': datetime.now().isoformat()
         }
+        print(f"DEBUG: Stored results for job {job_id}, preview_data length: {len(preview_data)}")
         
         # Store job_id in session
         session['job_id'] = job_id
