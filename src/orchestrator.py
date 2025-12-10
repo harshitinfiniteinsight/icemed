@@ -168,10 +168,12 @@ class ReconciliationOrchestrator:
             logger.info(f"Execution time: {duration:.2f} seconds")
             logger.info("="*60)
             
+            # Use actual paths (may be /tmp if read-only filesystem)
             output_files = {
-                "general_reconciliation": reconciliation_path,
-                "master_missing": master_missing_path
+                "general_reconciliation": summary.general_reconciliation_file,
+                "master_missing": summary.master_missing_file
             }
+            logger.info(f"Returning output files with actual paths: {output_files}")
             
             return summary, output_files
             
