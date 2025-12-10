@@ -65,25 +65,68 @@ def get_preview_data(reconciliation_file_path, max_rows=20):
     """Extract preview data from reconciliation file"""
     from openpyxl import load_workbook
     preview_data = []
+    
+    if not reconciliation_file_path:
+        print(f"ERROR: No reconciliation file path provided")
+        return preview_data
+    
+    print(f"DEBUG get_preview_data: Attempting to read from: {reconciliation_file_path}")
+    print(f"DEBUG get_preview_data: File exists: {os.path.exists(reconciliation_file_path)}")
+    
     try:
-        if not reconciliation_file_path or not os.path.exists(reconciliation_file_path):
-            print(f"Warning: Reconciliation file not found: {reconciliation_file_path}")
+        if not os.path.exists(reconciliation_file_path):
+            print(f"ERROR: Reconciliation file not found: {reconciliation_file_path}")
+            # Try to find file in /tmp if original path doesn't exist
+            import tempfile
+            filename = os.path.basename(reconciliation_file_path)
+            temp_path = os.path.join(tempfile.gettempdir(), filename)
+            if os.path.exists(temp_path):
+                print(f"DEBUG: Found file in /tmp: {temp_path}")
+                reconciliation_file_path = temp_path
+            else:
+                print(f"ERROR: File not found in /tmp either: {temp_path}")
+                return preview_data
+        
+        print(f"DEBUG: Loading workbook from: {reconciliation_file_path}")
+        wb = load_workbook(reconciliation_file_path, read_only=True, data_only=True)
+        
+        if 'Data' not in wb.sheetnames:
+            print(f"ERROR: 'Data' sheet not found. Available sheets: {wb.sheetnames}")
+            wb.close()
             return preview_data
         
-        wb = load_workbook(reconciliation_file_path, read_only=True, data_only=True)
         ws = wb['Data']
         rows = list(ws.iter_rows(values_only=True))
+        print(f"DEBUG: Total rows in sheet: {len(rows)}")
+        
+        if not rows:
+            print(f"WARNING: No rows found in Data sheet")
+            wb.close()
+            return preview_data
+        
         headers = rows[0] if rows else []
+        print(f"DEBUG: Headers: {headers[:5]}...")  # Print first 5 headers
+        
         # Get first max_rows of data (skip header)
-        for row in rows[1:max_rows+1]:
-            if row:  # Skip empty rows
-                preview_data.append(dict(zip(headers, row)))
+        data_rows = rows[1:max_rows+1]
+        print(f"DEBUG: Processing {len(data_rows)} data rows")
+        
+        for idx, row in enumerate(data_rows):
+            if row and any(cell is not None for cell in row):  # Skip completely empty rows
+                try:
+                    row_dict = dict(zip(headers, row))
+                    preview_data.append(row_dict)
+                except Exception as e:
+                    print(f"WARNING: Error processing row {idx}: {e}")
+        
         wb.close()
-        print(f"Successfully loaded {len(preview_data)} preview rows from {reconciliation_file_path}")
+        print(f"SUCCESS: Loaded {len(preview_data)} preview rows from {reconciliation_file_path}")
+        
     except Exception as e:
-        print(f"Error reading preview data from {reconciliation_file_path}: {e}")
+        print(f"ERROR reading preview data from {reconciliation_file_path}: {e}")
         import traceback
         traceback.print_exc()
+    
     return preview_data
 
 
@@ -245,9 +288,17 @@ def upload_file():
         job_id = str(uuid.uuid4())
         summary, output_files = orch.run(file_path)
         
-        # Get preview data
+        # Get preview data - use the path from output_files (which has the actual /tmp path)
         reconciliation_file_path = output_files.get('general_reconciliation')
+        print(f"DEBUG: Summary general_reconciliation_file: {summary.general_reconciliation_file}")
+        print(f"DEBUG: Output files general_reconciliation: {reconciliation_file_path}")
         print(f"DEBUG: Getting preview data from: {reconciliation_file_path}")
+        
+        if not reconciliation_file_path:
+            print(f"ERROR: No reconciliation file path in output_files!")
+            reconciliation_file_path = summary.general_reconciliation_file
+            print(f"DEBUG: Using summary path instead: {reconciliation_file_path}")
+        
         preview_data = get_preview_data(reconciliation_file_path)
         print(f"DEBUG: Preview data loaded: {len(preview_data)} rows")
         
@@ -310,9 +361,17 @@ def process_sample():
         job_id = str(uuid.uuid4())
         summary, output_files = orch.run(file_path)
         
-        # Get preview data
+        # Get preview data - use the path from output_files (which has the actual /tmp path)
         reconciliation_file_path = output_files.get('general_reconciliation')
+        print(f"DEBUG: Summary general_reconciliation_file: {summary.general_reconciliation_file}")
+        print(f"DEBUG: Output files general_reconciliation: {reconciliation_file_path}")
         print(f"DEBUG: Getting preview data from: {reconciliation_file_path}")
+        
+        if not reconciliation_file_path:
+            print(f"ERROR: No reconciliation file path in output_files!")
+            reconciliation_file_path = summary.general_reconciliation_file
+            print(f"DEBUG: Using summary path instead: {reconciliation_file_path}")
+        
         preview_data = get_preview_data(reconciliation_file_path)
         print(f"DEBUG: Preview data loaded: {len(preview_data)} rows")
         
