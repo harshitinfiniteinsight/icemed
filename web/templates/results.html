@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICE Reconciliation - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ICE Charge Import & Reconciliation</h1>
+            <p class="subtitle">Processing Results</p>
+        </header>
+
+        <main>
+            {% if error %}
+            <div class="card error-card">
+                <h2>Error</h2>
+                <p>{{ error }}</p>
+                <a href="/" class="btn btn-primary">Back to Upload</a>
+            </div>
+            {% else %}
+            <div class="card">
+                <h2>Summary Statistics</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ results.summary.total_encounters }}</div>
+                        <div class="stat-label">Total Encounters</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-value">{{ results.summary.billed_count }}</div>
+                        <div class="stat-label">Billed Successfully</div>
+                    </div>
+                    <div class="stat-card error">
+                        <div class="stat-value">{{ results.summary.not_billed_count }}</div>
+                        <div class="stat-label">Not Billed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ "%.1f"|format(results.summary.success_rate) }}%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Master Missing Updates</h2>
+                <div class="master-missing-stats">
+                    <div class="mm-stat">
+                        <span class="mm-label">Added:</span>
+                        <span class="mm-value">{{ results.summary.master_missing_added }}</span>
+                    </div>
+                    <div class="mm-stat">
+                        <span class="mm-label">Updated:</span>
+                        <span class="mm-value">{{ results.summary.master_missing_updated }}</span>
+                    </div>
+                    <div class="mm-stat">
+                        <span class="mm-label">Removed:</span>
+                        <span class="mm-value">{{ results.summary.master_missing_removed }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Data Preview (First 20 Rows)</h2>
+                {% if results.preview_data and results.preview_data|length > 0 %}
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Date of Service</th>
+                                <th>Facility</th>
+                                <th>Type of Care</th>
+                                <th>CPT</th>
+                                <th>Billed</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in results.preview_data %}
+                            <tr class="{{ 'success-row' if row.Billed == 'Yes' else 'error-row' }}">
+                                <td>{{ row['Patient Name'] }}</td>
+                                <td>{{ row['Date of Service'] }}</td>
+                                <td>{{ row.Facility }}</td>
+                                <td>{{ row['Type of Care'] }}</td>
+                                <td>{{ row.CPT }}</td>
+                                <td>
+                                    <span class="badge {{ 'badge-success' if row.Billed == 'Yes' else 'badge-error' }}">
+                                        {{ row.Billed }}
+                                    </span>
+                                </td>
+                                <td>{{ row['Reason for not billed'] or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="table-footer">Showing {{ results.preview_data|length }} of {{ results.summary.total_encounters }} encounters</p>
+                {% else %}
+                <p>No preview data available</p>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h2>Download Output Files</h2>
+                <div class="download-section">
+                    <a href="/api/download/reconciliation" class="btn btn-download">
+                        <span class="btn-icon">📥</span>
+                        Download General Reconciliation
+                    </a>
+                    <a href="/api/download/master_missing" class="btn btn-download">
+                        <span class="btn-icon">📥</span>
+                        Download Master Missing
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Execution Details</h2>
+                <table class="details-table">
+                    <tr>
+                        <td><strong>Execution Date:</strong></td>
+                        <td>{{ results.summary.execution_date }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Input File:</strong></td>
+                        <td>{{ results.summary.input_file }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reconciliation File:</strong></td>
+                        <td>{{ results.summary.general_reconciliation_file }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Master Missing File:</strong></td>
+                        <td>{{ results.summary.master_missing_file }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">Process Another File</a>
+            </div>
+            {% endif %}
+        </main>
+
+        <footer>
+            <p>ICE Reconciliation Mock System - Prototype</p>
+        </footer>
+    </div>
+</body>
+</html>

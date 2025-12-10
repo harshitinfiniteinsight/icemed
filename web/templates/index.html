@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICE Reconciliation - Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ICE Charge Import & Reconciliation</h1>
+            <p class="subtitle">Mock System - Process Excel files and generate reconciliation reports</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2>Upload ICE Export File</h2>
+                
+                <div class="upload-section">
+                    <div class="option-section">
+                        <h3>Option 1: Upload Your File</h3>
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="file-input-wrapper">
+                                <input type="file" id="fileInput" name="file" accept=".xlsx" required>
+                                <label for="fileInput" class="file-label">
+                                    <span class="file-icon">📁</span>
+                                    <span id="fileName">Choose Excel file (.xlsx)</span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="uploadBtn">
+                                <span class="btn-icon">🚀</span>
+                                Process File
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+
+                    <div class="option-section">
+                        <h3>Option 2: Select Sample File</h3>
+                        <form id="sampleForm">
+                            <div class="select-wrapper">
+                                <select id="sampleSelect" name="sample_file" onchange="handleSamplePreview()">
+                                    <option value="">Loading sample files...</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Raw Data Preview (shown when file selected, before processing) -->
+                            <div id="rawDataPreview" style="display: none; margin-top: 20px;">
+                                <h4>File Preview (First 20 Rows)</h4>
+                                <div id="rawDataContainer"></div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-secondary" id="sampleBtn" style="margin-top: 15px;">
+                                <span class="btn-icon">📊</span>
+                                Process Sample
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="statusSection" class="status-section" style="display: none;">
+                    <div class="status-message" id="statusMessage"></div>
+                    <div class="progress-bar" id="progressBar" style="display: none;">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section (shown after processing) -->
+            <div id="resultsSection" style="display: none;">
+                <!-- Summary Statistics -->
+                <div class="card">
+                    <h2>Summary Statistics</h2>
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Master Missing Updates -->
+                <div class="card">
+                    <h2>Master Missing Updates</h2>
+                    <div class="master-missing-stats" id="masterMissingStats">
+                        <!-- Master missing stats will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="card">
+                    <h2>Data Preview (First 20 Rows)</h2>
+                    <div id="dataTableContainer">
+                        <!-- Data table will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Download Buttons -->
+                <div class="card">
+                    <h2>Download Output Files</h2>
+                    <div class="download-section">
+                        <a href="#" id="downloadReconciliation" class="btn btn-download" onclick="downloadFileByJob('reconciliation'); return false;">
+                            <span class="btn-icon">📥</span>
+                            Download General Reconciliation
+                        </a>
+                        <a href="#" id="downloadMasterMissing" class="btn btn-download" onclick="downloadFileByJob('master_missing'); return false;">
+                            <span class="btn-icon">📥</span>
+                            Download Master Missing
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Process Another File Button -->
+                <div class="action-buttons">
+                    <button onclick="location.reload()" class="btn btn-primary">Process Another File</button>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>How It Works</h3>
+                <ol>
+                    <li>Upload an ICE export Excel file or select a sample file</li>
+                    <li>System processes encounters and evaluates billing (mock EBS)</li>
+                    <li>View results and download reconciliation files</li>
+                </ol>
+                
+                <h3>Sample Files</h3>
+                <ul>
+                    <li><strong>Complete</strong> - All encounters with complete data</li>
+                    <li><strong>Missing DX</strong> - Encounters with missing diagnosis codes</li>
+                    <li><strong>Missing CPT</strong> - Encounters with missing procedure codes</li>
+                    <li><strong>Mixed</strong> - Various scenarios combined</li>
+                    <li><strong>Multiple Dates</strong> - Encounters from different service dates</li>
+                    <li><strong>Large</strong> - 150+ encounters for performance testing</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>ICE Reconciliation Mock System - Prototype</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

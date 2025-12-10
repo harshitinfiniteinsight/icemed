@@ -1,0 +1,18 @@
+{
+  "input": {
+    "folderPath": "data/input",
+    "sheetName": "Sheet1"
+  },
+  "output": {
+    "folderPath": "data/output",
+    "dateFormat": "MM-dd-yyyy"
+  },
+  "masterMissing": {
+    "folderPath": "data/output",
+    "fileNamePattern": "Master Missing to {date}.xlsx"
+  },
+  "logging": {
+    "level": "INFO",
+    "filePath": "logs"
+  }
+}
