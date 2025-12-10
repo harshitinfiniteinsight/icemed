@@ -15,19 +15,34 @@ sys.path.insert(0, PROJECT_ROOT)
 
 from src.orchestrator import ReconciliationOrchestrator
 
-app = Flask(__name__)
+# Initialize Flask with explicit paths for Vercel
+template_dir = os.path.join(PROJECT_ROOT, 'web', 'templates')
+static_dir = os.path.join(PROJECT_ROOT, 'web', 'static')
+
+app = Flask(__name__, 
+            template_folder=template_dir,
+            static_folder=static_dir,
+            static_url_path='/static')
 app.secret_key = 'ice-reconciliation-secret-key-change-in-production'
 
 # Configuration
-UPLOAD_FOLDER = os.path.join(PROJECT_ROOT, 'data/input/uploads')
+UPLOAD_FOLDER = os.path.join(PROJECT_ROOT, 'data', 'input', 'uploads')
 ALLOWED_EXTENSIONS = {'xlsx'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Create directories if they don't exist (may fail in read-only Vercel, that's OK)
+try:
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+except Exception:
+    pass  # May fail in serverless environment, that's OK
 
 # Initialize orchestrator with absolute path to config
 CONFIG_PATH = os.path.join(PROJECT_ROOT, 'config.json')
-orchestrator = ReconciliationOrchestrator(CONFIG_PATH)
+try:
+    orchestrator = ReconciliationOrchestrator(CONFIG_PATH)
+except Exception as e:
+    print(f"Warning: Failed to initialize orchestrator: {e}")
+    orchestrator = None  # Will be handled in routes
 
 # Store results in memory (in production, use Redis or database)
 results_store = {}
@@ -65,9 +80,15 @@ def index():
 @app.route('/api/sample-files', methods=['GET'])
 def get_sample_files():
     """Get list of available sample files"""
-    sample_dir = 'data/input'
+    sample_dir = os.path.join(PROJECT_ROOT, 'data', 'input')
     
     try:
+        if not os.path.exists(sample_dir):
+            return jsonify({
+                'success': False,
+                'error': f'Sample directory not found: {sample_dir}'
+            }), 404
+            
         files = [
             f for f in os.listdir(sample_dir)
             if f.startswith('sample_') and f.endswith('.xlsx')
@@ -196,6 +217,13 @@ def upload_file():
         file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
         file.save(file_path)
         
+        # Check if orchestrator is initialized
+        if orchestrator is None:
+            return jsonify({
+                'success': False,
+                'error': 'Orchestrator not initialized. Check server logs.'
+            }), 500
+        
         # Process file
         job_id = str(uuid.uuid4())
         summary, output_files = orchestrator.run(file_path)
@@ -241,13 +269,27 @@ def process_sample():
                 'error': 'No sample file specified'
             }), 400
         
-        file_path = os.path.join('data/input', sample_name)
+        file_path = os.path.join(PROJECT_ROOT, 'data', 'input', sample_name)
         
         if not os.path.exists(file_path):
             return jsonify({
                 'success': False,
                 'error': f'Sample file not found: {sample_name}'
             }), 404
+        
+        # Check if orchestrator is initialized
+        if orchestrator is None:
+            return jsonify({
+                'success': False,
+                'error': 'Orchestrator not initialized. Check server logs.'
+            }), 500
+        
+        # Check if orchestrator is initialized
+        if orchestrator is None:
+            return jsonify({
+                'success': False,
+                'error': 'Orchestrator not initialized. Check server logs.'
+            }), 500
         
         # Process file
         job_id = str(uuid.uuid4())
