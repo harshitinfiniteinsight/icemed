@@ -53,9 +53,15 @@ class ReconciliationOrchestrator:
         )
         self.master_missing_mgr = MasterMissingManager(master_missing_config)
         
-        # Create output directories if they don't exist
+        # Create output directories if they don't exist (may fail in read-only environments like Vercel)
         output_folder = self._resolve_path(self.config.get("output", {}).get("folderPath", "data/output"))
-        os.makedirs(output_folder, exist_ok=True)
+        try:
+            os.makedirs(output_folder, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            # In read-only filesystems (like Vercel), we can't create directories
+            # This is OK - we'll use /tmp for output files instead
+            logger.warning(f"Cannot create output directory {output_folder}: {e}. Will use /tmp for outputs.")
+            # Don't fail - we'll handle this in file writing
     
     def run(self, input_file_path: str) -> Tuple[ExecutionSummary, dict]:
         """

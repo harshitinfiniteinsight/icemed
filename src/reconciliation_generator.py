@@ -47,8 +47,21 @@ class GeneralReconciliationGenerator:
         # Create Summary sheet
         self._create_summary_sheet(wb, encounters, billing_results)
         
-        # Save file
-        wb.save(output_path)
+        # Save file (use /tmp if original path is read-only)
+        try:
+            wb.save(output_path)
+        except (OSError, PermissionError):
+            # If we can't write to the original path (read-only filesystem),
+            # save to /tmp instead
+            import tempfile
+            import os
+            temp_dir = tempfile.gettempdir()
+            filename = os.path.basename(output_path)
+            temp_path = os.path.join(temp_dir, filename)
+            wb.save(temp_path)
+            logger.warning(f"Cannot write to {output_path}, saved to {temp_path} instead")
+            # Update output_path for caller
+            output_path = temp_path
         logger.info(f"Generated General Reconciliation file: {output_path}")
     
     def _create_data_sheet(self, wb: Workbook, encounters: List[Encounter], 
