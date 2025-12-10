@@ -5,9 +5,13 @@ import sys
 import os
 
 # Add parent directory to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, PROJECT_ROOT)
+
+# Change to project root for file paths to work correctly
+os.chdir(PROJECT_ROOT)
 
 from web.app import app
 
-# Vercel will use this 'app' variable
-app = app
+# Export app for Vercel (Vercel looks for 'handler' or 'app')
+handler = app
